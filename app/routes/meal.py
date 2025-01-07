@@ -195,7 +195,7 @@ def get_calories_plan(id):
 
 
 def calculate_proteins(food):
-    print("comida recibida:", food)
+    #print("comida recibida:", food)
     pro = 0
     for foo in food:
         if 'alimento' not in foo:
@@ -225,7 +225,7 @@ def calculate_fats(food):
 
 
 def calculate_carbohydrates(food):
-    print("comida recibida:", food)
+   # print("comida recibida:", food)
     carbohydrates = 0
     for foo in food:
         if 'alimento' not in foo:
@@ -580,3 +580,4 @@ def get_foods_by_meal(meal_id):
     except Exception as e:
         print(f"Error occurred: {e}")
         return jsonify({"error": "Error al obtener los alimentos"}), 500
+

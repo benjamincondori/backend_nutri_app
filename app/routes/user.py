@@ -279,3 +279,89 @@ def get_nutritionist_profile(current_user_id):
         }), 200
 
     return jsonify({"message": "Nutricionista no encontrado."}), 404
+
+@user_bp.route("/profile", methods=["PUT"])
+@token_required
+def update_personal_profile(current_user_id):
+    """
+    Editar los datos personales de un usuario.
+    ---
+    tags:
+      - Usuarios
+    parameters:
+      - name: Authorization
+        in: header
+        required: true
+        type: string
+        description: Token JWT del usuario
+        example: "Bearer <tu_token_aqui>"
+      - in: body
+        name: body
+        required: true
+        description: Datos personales a actualizar
+        schema:
+          type: object
+          properties:
+            name:
+              type: string
+              description: Nombre del usuario
+              example: Juan
+            lastname:
+              type: string
+              description: Apellido del usuario
+              example: Pérez
+            telephone:
+              type: string
+              description: Teléfono del usuario
+              example: 74646527
+            url_image:
+              type: string
+              description: URL de la imagen del perfil
+              example: https://res.cloudinary.com/image/upload/v1234567890/user.jpg
+    responses:
+      200:
+        description: Datos personales actualizados correctamente
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Datos personales actualizados correctamente."
+      404:
+        description: Usuario no encontrado
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Usuario no encontrado."
+      400:
+        description: Error en los datos proporcionados
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Datos inválidos."
+    """
+    user = User.query.get(current_user_id)
+    if not user:
+        return jsonify({"message": "Usuario no encontrado."}), 404
+
+    data = request.get_json()
+    if not data:
+        return jsonify({"message": "Datos inválidos."}), 400
+
+    # Actualizar campos personales
+    user.name = data.get("name", user.name)
+    user.lastname = data.get("lastname", user.lastname)
+    user.telephone = data.get("telephone", user.telephone)
+    user.url_image = data.get("url_image", user.url_image)
+
+    # Guardar cambios
+    try:
+        db.session.commit()
+        return jsonify({"message": "Datos personales actualizados correctamente."}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"message": f"Error al actualizar los datos: {str(e)}"}), 500
