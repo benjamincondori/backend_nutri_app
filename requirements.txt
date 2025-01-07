@@ -1,0 +1,17 @@
+anthropic
+flasgger
+Flask-HTTPAuth
+flask-marshmallow
+Flask-Migrate
+google-generativeai
+grpcio-status
+marshmallow-sqlalchemy
+openpyxl
+pandas
+pip
+psycopg2
+PyJWT
+python-dotenv
+scikit-learn
+tensorflow
+cloudinary
